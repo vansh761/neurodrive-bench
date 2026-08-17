@@ -1,0 +1,36 @@
+{
+  "model_type": "lstm",
+  "steering_weights": {
+    "current_heading_error": -0.0023083731490037705,
+    "current_lane_offset": -0.0423385049978836,
+    "heading_trend": 0.0019965926208090398,
+    "lane_trend": 0.00046128940344148414,
+    "mean_heading_error": -0.007962454191304933,
+    "mean_lane_offset": -0.0427039511971228,
+    "obstacle_distance": 0.00040052461943137303,
+    "stability": -0.004709413476722497,
+    "weighted_heading_error": -0.00465937512314786,
+    "bias": -0.0052756126168700766
+  },
+  "throttle_weights": {
+    "current_heading_error": 8.60808535778651e-05,
+    "current_lane_offset": 7.23830409189148e-05,
+    "heading_trend": -0.0002475816469650052,
+    "lane_trend": -1.5226979198199031e-05,
+    "mean_heading_error": 2.1289192249795248e-05,
+    "mean_lane_offset": 4.544831248399601e-05,
+    "obstacle_distance": 0.0019474574253774148,
+    "stability": 0.01032377447025232,
+    "weighted_heading_error": -0.00018145145806737077,
+    "bias": 0.3608519582825833
+  },
+  "uncertainty_bias": 0.20638883926214913,
+  "adaptation_bias": 0.7832102965963637,
+  "metadata": {
+    "samples_per_model": 400,
+    "epochs": 60,
+    "learning_rate": 0.05,
+    "history_window": 20,
+    "trainer": "synthetic_gradient_descent"
+  }
+}

@@ -1,0 +1,112 @@
+benchmark:
+  name: "baseline_robustness_suite"
+  seed: 7
+  output_dir: "outputs/baseline_robustness_suite"
+
+simulation:
+  backend: "stub"
+  host: "localhost"
+  port: 2000
+  timeout_seconds: 10.0
+  synchronous_mode: true
+  fixed_delta_seconds: 0.05
+  map_name: "Town04"
+  max_episode_steps: 100
+  sample_stride: 5
+  ego_vehicle_filter: "vehicle.tesla.model3"
+  scenario_vehicle_filter: "vehicle.audi.a2"
+
+telemetry:
+  features:
+    - speed
+    - lane_offset
+    - yaw
+    - heading_error
+    - obstacle_distance
+    - acceleration
+    - delta_t
+  history_window: 20
+
+stress:
+  environmental:
+    rain: 0.2
+    fog: 0.1
+    night: false
+  sensor:
+    noise_std: 0.03
+    packet_dropout: 0.05
+    latency_steps: 1
+  scenario:
+    sudden_obstacle_probability: 0.1
+    lane_blockage_probability: 0.05
+    traffic_multiplier: 1.2
+
+evaluation:
+  stress_levels: [0.0, 0.25, 0.5, 0.75, 1.0]
+  episodes_per_level: 8
+  metrics:
+    - collision_rate
+    - offroad_frequency
+    - steering_oscillation
+    - control_jitter
+    - recovery_time
+    - graceful_degradation_index
+
+training:
+  output_dir: "artifacts/model_profiles"
+  samples_per_model: 400
+  epochs: 60
+  learning_rate: 0.05
+
+neural_training:
+  output_dir: "artifacts/neural_models"
+  epochs: 50
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.00001
+
+data_collection:
+  episodes: 50
+  output_path: "artifacts/datasets/demo.parquet"
+
+# PRIMARY comparison: all three are real PyTorch temporal models (models/neural/),
+# trained by the same NeuralTrainer, on the same dataset/seed/epochs/optimizer/loss.
+# This is the set that should be used for any "LSTM vs Transformer vs ATSM" claim.
+# Train them with:
+#   python -m neurodrive_bench.cli collect-data --config configs/benchmark.example.yaml --episodes 200 --output artifacts/datasets/demo.parquet
+#   python -m neurodrive_bench.cli train --config configs/benchmark.example.yaml --model-type lstm        --dataset artifacts/datasets/demo.parquet
+#   python -m neurodrive_bench.cli train --config configs/benchmark.example.yaml --model-type transformer --dataset artifacts/datasets/demo.parquet
+#   python -m neurodrive_bench.cli train --config configs/benchmark.example.yaml --model-type lnn          --dataset artifacts/datasets/demo.parquet
+models:
+  - name: "lstm_neural"
+    type: "lstm_neural"
+    parameter_budget: 200000
+    checkpoint_path: "artifacts/neural_models/lstm_best.pt"
+  - name: "transformer_neural"
+    type: "transformer_neural"
+    parameter_budget: 200000
+    checkpoint_path: "artifacts/neural_models/transformer_best.pt"
+  - name: "atsm_lnn_candidate"
+    type: "lnn"
+    parameter_budget: 200000
+    checkpoint_path: "artifacts/neural_models/lnn_best.pt"
+
+# SECONDARY / sanity-floor models: hand-written rule-based control laws, NOT neural
+# networks. Each uses a different hand-tuned formula (see models/baselines.py and the
+# per-model-type oracle in models/training.py), so they are NOT a fair architecture
+# comparison against each other or against the models above or against one another.
+# Keep these only as a "does a trained model at least beat a naive rule" floor, and
+# never report a result from this list as "the LSTM" or "the Transformer" model.
+baseline_rulebased_models:
+  - name: "rulebased_lstm_stub"
+    type: "lstm"
+    parameter_budget: 0
+    artifact_path: "artifacts/model_profiles/lstm_baseline.json"
+  - name: "rulebased_transformer_stub"
+    type: "transformer"
+    parameter_budget: 0
+    artifact_path: "artifacts/model_profiles/transformer_baseline.json"
+  - name: "rulebased_adaptive_stub"
+    type: "adaptive_temporal"
+    parameter_budget: 0
+    artifact_path: "artifacts/model_profiles/atsm_candidate.json"

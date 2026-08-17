@@ -1,0 +1,6 @@
+{
+  "model_type": "lnn",
+  "history_window": 20,
+  "val_loss": 0.004035358604742214,
+  "epoch": 6
+}

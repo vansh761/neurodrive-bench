@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neurodrive-bench"
+version = "0.1.0"
+description = "Autonomous driving robustness and safety evaluation platform"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "OpenAI Codex" }
+]
+dependencies = [
+  "PyYAML>=6.0",
+  "torch>=2.0.0",
+  "pyarrow>=14.0.0"
+]
+
+[project.optional-dependencies]
+dashboard = [
+  "streamlit>=1.35"
+]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.5"
+]
+training = [
+  "tensorboard>=2.15.0"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

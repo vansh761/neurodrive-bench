@@ -1,0 +1,6 @@
+{
+  "model_type": "transformer",
+  "history_window": 20,
+  "val_loss": 0.0040648079465609045,
+  "epoch": 6
+}

@@ -1,0 +1,36 @@
+{
+  "model_type": "adaptive_temporal",
+  "steering_weights": {
+    "current_heading_error": -0.04719183309398878,
+    "current_lane_offset": -0.03484059240806221,
+    "heading_trend": -0.041634613023383296,
+    "lane_trend": -0.00225668953310812,
+    "mean_heading_error": -0.007110012750067452,
+    "mean_lane_offset": -0.03325563577891216,
+    "obstacle_distance": -6.69644525954418e-05,
+    "stability": -0.0004934685725556107,
+    "weighted_heading_error": -0.015759922674840027,
+    "bias": -0.00017492019318051692
+  },
+  "throttle_weights": {
+    "current_heading_error": 0.00015941020681827176,
+    "current_lane_offset": 0.0004192852209826598,
+    "heading_trend": 0.00025352739927539045,
+    "lane_trend": -0.00010563842812905586,
+    "mean_heading_error": -1.9482172774946775e-06,
+    "mean_lane_offset": 0.00043911922961142267,
+    "obstacle_distance": 0.0019063556190535035,
+    "stability": -0.0011554222980362597,
+    "weighted_heading_error": -7.099777318894506e-05,
+    "bias": 0.347907391146542
+  },
+  "uncertainty_bias": 0.11722463575318404,
+  "adaptation_bias": 0.9313422954898937,
+  "metadata": {
+    "samples_per_model": 400,
+    "epochs": 60,
+    "learning_rate": 0.05,
+    "history_window": 20,
+    "trainer": "synthetic_gradient_descent"
+  }
+}
